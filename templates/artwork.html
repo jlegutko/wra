@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>White Red Art</title>
+  <link rel="stylesheet" href="css/wra.css">
+  <script>document.documentElement.className=document.documentElement.className.replace(/\bno-js\b/,'') + ' js';</script>
+</head>
+
+<body>
+
+  <header class="navbar">
+    <a class="logo" href="">
+      <h1 class="logo__title">White Red Art</h1>
+      <img class="logo__image" src="assets/images/logo.svg" alt="logo">
+    </a>
+    <button class="navbar__button" id="menuButton">
+        <span class="icon-menu" aria-hidden="true"></span>
+        <span class="visuallyhidden">Menu</span>
+    </button>
+    <nav class="navigation" id="menuElement">
+      <ul class="menu menu--primary">
+        <li class="menu__item">
+          <a href="#" class="menu__link">Historia</a>
+        </li>
+        <li class="menu__item">
+          <a href="#" class="menu__link">Inspiracje</a>
+        </li>
+        <li class="menu__item">
+          <a href="#" class="menu__link">O serwisie</a>
+        </li>
+      </ul>
+   </nav>
+    <ul class="menu">
+      <li class="menu__item">
+        <a href="" class="menu__link menu__link--icon" title="Profil">
+          <span class="icon-user" aria-hidden="true"></span>
+          <span class="visuallyhidden">Profil</span>
+        </a>
+      </li>
+      <li class="menu__item">
+        <a href="" class="menu__link menu__link--icon" title="Profil">
+          <span class="icon-log-out" aria-hidden="true"></span>
+          <span class="visuallyhidden">Wyloguj się</span>
+        </a>
+      </li>
+    </ul>
+  </header>
+
+  <main class="main" role="main" id="main">
+
+    <section class="artwork">
+        <a class="artwork__link" href="assets/images/showcase_img_2.jpg">
+          <img src="assets/images/showcase_img_2.jpg" class="artwork__image">
+        </a>
+        <div class="artwork__description">
+          <dl class="informations">
+            <dt class="informations__title">Tytuł</th>
+            <dd class="informations__definition">Lorem ipsum</dd>
+            <dt class="informations__title">Autor</th>
+            <dd class="informations__definition">Lorem ipsum</dd>
+            <dt class="informations__title">Wymiary</th>
+            <dd class="informations__definition">Lorem ipsum</dd>
+            <dt class="informations__title">Technika</th>
+            <dd class="informations__definition">Lorem ipsum</dd>
+            <dt class="informations__title">Opis</th>
+            <dd class="informations__definition">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem illo fuga, molestias sit inventore eius, dignissimos alias sint nemo eaque, voluptas voluptatem similique aperiam voluptatibus consequatur.</dd>
+            <dt class="informations__title">Rok powstania</th>
+            <dd class="informations__definition">Lorem ipsum</dd>
+          </dl>
+
+
+        <div class="rating">
+          <div class="rating__average">
+            <p class="rating__title">Średnia ocena użytkowników:</p>
+            <p class="rating__number"><span class="rating__icon">★</span> 5.7</p>
+          </div>
+         <div class="rating__add">
+          <form class="rating__scale" action="#">
+            <input class="rating__item" type="radio" id="grade_1" name="grade" value="1" />
+              <label class = "rating__label" for="grade_1" title="1 gwiadka">
+                <span class="icon-star rating__star"></span>
+              </label>
+            <input class="rating__item" type="radio" id="grade_2" name="grade" value="2" />
+            <label class = "rating__label" for="grade_2" title="2 gwiazdki">
+                <span class="icon-star rating__star"></span>
+            </label>
+            <input class="rating__item" type="radio" id="grade_3" name="grade" value="3" />
+              <label class = "rating__label" for="grade_3" title="3 gwiazdki">
+                <span class="icon-star rating__star"></span>
+              </label>
+            <input class="rating__item" type="radio" id="grade_4" name="grade" value="4" />
+              <label class = "rating__label" for="grade_4" title="4 gwiazdki">
+                <span class="icon-star rating__star"></span>
+              </label>
+            <input class="rating__item" type="radio" id="grade_5" name="grade" value="5" />
+            <label class = "rating__label" for="grade_5" title="5 gwiazdek">
+              <span class="icon-star icon-star rating__star"></span>
+            </label>
+            <div class="rating__button">
+              <button class="profile__button profile__button--save" type="submit">Oceń</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+        <div class="favourite">
+          <span class="favourite__entry">Dodaj obraz do ulubionych</span>
+          <form class="favourite__add" action="#">
+            <input class="favourite__item" type="submit" id="favouriteElement" name="favourite" value="1" />
+            <label class = "favourite__label" for="favouriteElement" title="Add to favourites">
+              <span class="favourite__icon icon-heart"></span>
+            </label>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="details">
+      <h2 class="details__header">Detale</h2>
+      <div class="detail">
+        <div class="detail__item">
+          <a href="assets/images/showcase_img_2.jpg" data-rel="lightcase:details" class="detail__link">
+            <img src="assets/images/showcase_img_2.jpg" class="detail__image">
+          </a>
+        </div>
+        <div class="detail__description">
+          <p class="detail__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat blanditiis, at, corporis quam unde nobis neque cum aliquam expedita ipsa suscipit dolor officia dignissimos id, atque nam magnam a maxime.</p>
+        </div>
+      </div>
+      <div class="detail">
+        <div class="detail__item">
+          <a href="assets/images/showcase_img_2.jpg" data-rel="lightcase:details" class="detail__link">
+            <img src="assets/images/showcase_img_2.jpg" class="detail__image">
+          </a>
+        </div>
+        <div class="detail__description">
+          <p class="detail__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro laboriosam esse alias aspernatur ducimus. Deleniti magni beatae earum illum minima quia et cum, officiis voluptatibus qui blanditiis ab provident aut!</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="return">
+      <a href="" class="return__link">
+        <span class="icon-chevron-left return__icon" aria-hidden="true"></span>
+        <span class="return__item">Powrót</span>
+      </a>
+    </div>
+
+    <section class="comments">
+      <h2 class="comments__header">Komentarze</h2>
+        <div class="comments__add">
+          <form class="comments__form" action="#">
+            <textarea class="comments__content" id="commentsElement" name="comment" placeholder="What are you doing right now?" ></textarea>
+              <button type="submit" class="comments__button">
+                <span class="comments__icon icon-plus"></span>
+                  Dodaj komentarz
+              </button>
+          </form>
+        </div>
+        <h3 class="container__header">Dodane</h3>
+        <div class="container">
+          <div class="container__comment">
+            <div class="container__content">
+              <p class="container__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem illo fuga, molestias sit inventore eius, dignissimos alias sint nemo eaque, voluptas voluptatem similique aperiam voluptatibus consequatur.</p>
+            </div>
+            <p class="container__item">Jadwiga Legutko, 05.05.2000</p>
+          </div>
+          <div class="container__comment">
+            <div class="container__content">
+              <p class="container__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem illo fuga, molestias sit inventore eius, dignissimos alias sint nemo eaque, voluptas voluptatem similique aperiam voluptatibus consequatur.</p>
+            </div>
+            <p class="container__item">Jadwiga Legutko, 05.05.2000</p>
+          </div>
+          <div class="container__comment">
+            <div class="container__content">
+              <p class="container__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem illo fuga, molestias sit inventore eius, dignissimos alias sint nemo eaque, voluptas voluptatem similique aperiam voluptatibus consequatur.</p>
+            </div>
+            <p class="container__item">Jadwiga Legutko, 05.05.2000</p>
+          </div>
+        </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span class="footer__item footer__item--year">Legutko &copy; 2018 </span>
+    <span class="footer__item footer__item--informations">Autorem niniejszego serwisu jest Jadwiga Legutko. Serwis ten stanowi integralną część pracy licencjackiej (kierunek: Elektroniczne Przetwarzanie Informacji), przygotowanej pod kierunkiem dr. hab. Grzegorza Bilińskiego, prof. ASP na Wydziale Zarządzania i Komunikacji Społecznej Uniwersytetu Jagiellońskiego. Autor nie jest odpowiedzialny za publikowane na stronie komentarze.</span>
+    <a href="" class="footer__item footer__item--link">Bibliografia
+      <span class="icon-arrow-right footer__icon"></span>
+    </a>
+  </footer>
+
+  <script src="assets/javascript/jquery.js"></script>
+  <script src="assets/javascript/lightcase.js"></script>
+  <script src="assets/javascript/smooth-scroll.polyfills.js"></script>
+  <script src="assets/javascript/scrollreveal.js"></script>
+  <script src="assets/javascript/scrollspy.js"></script>
+  <script src="assets/javascript/wra.js"></script>
+
+</body>
+</html>
