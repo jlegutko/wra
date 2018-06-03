@@ -36,17 +36,17 @@
             {% if g.user.id == user_id %}
                 <ul class="content__options">
                   <li class="content__item">
-                    <a href="edit_profile.html" class="content__link">
+                    <a href="{{url_for('edit')}}" class="content__link">
                       <span class="content__icon icon-edit" aria-hidden="true"></span>Edytuj dane
                     </a>
                   </li>
                   <li class="content__item">
-                    <a href="change_pswd.html" class="content__link">
+                    <a href="{{url_for('change')}}" class="content__link">
                       <span class="content__icon icon-lock" aria-hidden="true"></span>Zmień hasło
                     </a>
                   </li>
                   <li class="content__item">
-                    <a href="delete_profile.html" class="content__link">
+                    <a href="{{url_for('delete_profile')}}" class="content__link">
                       <span class="content__icon icon-user-x" aria-hidden="true"></span>Usuń konto
                     </a>
                   </li>

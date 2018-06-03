@@ -3,6 +3,10 @@ from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql import func
 from wra import db, app, login_manager, bcrypt
+from flask_admin.contrib.sqla import ModelView
+
+from flask_admin import Admin, AdminIndexView, helpers, expose
+from flask_admin.contrib.sqla import ModelView
 
 from .models.Models import User, Role, Profile, Artwork, Exhibition, Picture, Category, Comment, Grade, Favourite, \
     About, Inspiration, PrintedSource, OnlineSource, ImageSource
@@ -16,13 +20,52 @@ def load_user(id):
 @app.before_request
 def before_request():
     g.user = current_user
+    g.page = request.url_rule.rule
+
+
+class WraAdminIndexView(AdminIndexView):
+    """
+    Custom Admin View
+    """
+    @expose('/')
+    def index(self):
+        """
+
+        :return:
+        """
+        if current_user.role.name != 'admin':
+            return redirect(url_for('index'))
+        return super(WraAdminIndexView, self).index()
+
+
+# Administrator panel
+admin = Admin(app, index_view=WraAdminIndexView(), name='admin_panel', template_mode='bootstrap3')
+admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Role, db.session))
+admin.add_view(ModelView(Profile, db.session))
+admin.add_view(ModelView(Artwork, db.session))
+admin.add_view(ModelView(Exhibition, db.session))
+admin.add_view(ModelView(Picture, db.session))
+admin.add_view(ModelView(Category, db.session))
+admin.add_view(ModelView(Comment, db.session))
+admin.add_view(ModelView(Grade, db.session))
+admin.add_view(ModelView(Favourite, db.session))
+admin.add_view(ModelView(About, db.session))
+admin.add_view(ModelView(Inspiration, db.session))
+admin.add_view(ModelView(PrintedSource, db.session))
+admin.add_view(ModelView(OnlineSource, db.session))
+admin.add_view(ModelView(ImageSource, db.session))
 
 
 @app.route('/')
 def index():
+    """
+
+    :return:
+    """
     exhibitions = Exhibition.query.all()
     artworks = Artwork.query.all()
-    return render_template('index.html', exhibitions=exhibitions, artworks=artworks)
+    return render_template('index.html', exhibitions=exhibitions, artworks=artworks, body_class="page-home")
 
 
 @app.route('/wystawa/<int:exhibition_id>')
@@ -191,13 +234,11 @@ def favourite(artwork_id):
 @login_required
 def profile(user_id):
     user = User.query.filter_by(id=user_id).first()
-    if user.role_id == 1:
-        return redirect(url_for('index'))
     profile = Profile.query.filter_by(user_id=user_id).first()
     favourites = Favourite.query.filter_by(user_id=user_id).all()
     grades = Grade.query.filter_by(user_id=user_id).all()
 
-    return render_template('profile.html', user_id=user_id, user=user, profile=profile, favourites=favourites, grades=grades)
+    return render_template('profile.html', user_id=user_id, user=user, profile=profile, favourites=favourites, grades=grades, body_class="page-profile")
 
 
 @app.route('/profil/edycja', methods=['POST', 'GET'])

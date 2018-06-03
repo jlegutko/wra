@@ -10,7 +10,7 @@
     <script>document.documentElement.className=document.documentElement.className.replace(/\bno-js\b/,'') + ' js';</script>
 </head>
 
-<body class="page-home">
+<body class="{{ body_class }}">
 
   <header class="navbar">
       <a class="logo" href="{{ url_for('index') }}">
@@ -24,36 +24,44 @@
       <nav class="navigation" id="menuElement">
           <ul class="menu menu--primary">
               <li class="menu__item">
-                  <a href="{{ url_for('index') }}" class="menu__link">Historia</a>
+                  <a href="{{ url_for('index') }}" class="menu__link {% if g.page == '/' %}menu__link--active{% endif %}">Historia</a>
               </li>
               <li class="menu__item">
-                  <a href="{{ url_for('inspirations') }}" class="menu__link">Inspiracje</a>
+                  <a href="{{ url_for('inspirations') }}" class="menu__link {% if 'inspiracje' in g.page %}menu__link--active{% endif %}">Inspiracje</a>
               </li>
               <li class="menu__item">
-                  <a href="{{ url_for('about') }}" class="menu__link">O serwisie</a>
+                  <a href="{{ url_for('about') }}" class="menu__link {% if 'o-serwisie' in g.page %}menu__link--active{% endif %}">O serwisie</a>
               </li>
           </ul>
       </nav>
       <ul class="menu">
       {% if g.user.is_authenticated %}
+          {% if g.user.role.name == 'admin' %}
+              <li class="menu__item">
+                  <a href="/admin" class="menu__link menu__link--icon" title="Administracja">
+                      <span class="icon-edit" aria-hidden="true"></span>
+                      <span class="visuallyhidden">Administracja</span>
+                  </a>
+            </li>
+          {% endif %}
           <li class="menu__item">
-              <a href="{{ url_for('profile', user_id = g.user.id) }}" class="menu__link menu__link--icon" title="Profil">
+              <a href="{{ url_for('profile', user_id = g.user.id) }}" class="menu__link menu__link--icon {% if 'profil' in g.page %}menu__link--active{% endif %}" title="Profil">
                   <span class="icon-user" aria-hidden="true"></span>
                   <span class="visuallyhidden">Profil</span>
               </a>
           </li>
           <li class="menu__item">
-              <a href="{{ url_for('logout') }}" class="menu__link menu__link--icon" title="Profil">
+              <a href="{{ url_for('logout') }}" class="menu__link menu__link--icon {% if 'wylogowywanie' in g.page %}menu__link--active{% endif %}" title="Profil">
                   <span class="icon-log-out" aria-hidden="true"></span>
                   <span class="visuallyhidden">Wyloguj się</span>
               </a>
           </li>
       {% else %}
           <li class="menu__item">
-              <a href="{{ url_for('register') }}" class="menu__link" title="Profil">Rejestracja</a>
+              <a href="{{ url_for('register') }}" class="menu__link {% if 'rejestracja' in g.page %}menu__link--active{% endif %}" title="Profil">Rejestracja</a>
           </li>
           <li class="menu__item">
-              <a href="{{ url_for('login') }}" class="menu__link" title="Profil">Logowanie</a>
+              <a href="{{ url_for('login') }}" class="menu__link {% if 'logowanie' in g.page %}menu__link--active{% endif %}" title="Profil">Logowanie</a>
           </li>
       {% endif %}
       </ul>
