@@ -1,121 +1,82 @@
-<!DOCTYPE html>
-<html lang="en" class="no-js">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>White Red Art</title>
-  <link rel="stylesheet" href="css/wra.css">
-  <script>document.documentElement.className=document.documentElement.className.replace(/\bno-js\b/,'') + ' js';</script>
-</head>
-
-<body>
-
-  <header class="navbar">
-    <a class="logo" href="">
-      <h1 class="logo__title">White Red Art</h1>
-      <img class="logo__image" src="assets/images/logo.svg" alt="logo">
-    </a>
-    <button class="navbar__button" id="menuButton">
-        <span class="icon-menu" aria-hidden="true"></span>
-        <span class="visuallyhidden">Menu</span>
-    </button>
-    <nav class="navigation" id="menuElement">
-      <ul class="menu menu--primary">
-        <li class="menu__item">
-          <a href="#" class="menu__link">Historia</a>
-        </li>
-        <li class="menu__item">
-          <a href="#" class="menu__link">Inspiracje</a>
-        </li>
-        <li class="menu__item">
-          <a href="#" class="menu__link">O serwisie</a>
-        </li>
-      </ul>
-   </nav>
-    <ul class="menu">
-      <li class="menu__item">
-        <a href="" class="menu__link menu__link--icon" title="Profil">
-          <span class="icon-user" aria-hidden="true"></span>
-          <span class="visuallyhidden">Profil</span>
-        </a>
-      </li>
-      <li class="menu__item">
-        <a href="" class="menu__link menu__link--icon" title="Profil">
-          <span class="icon-log-out" aria-hidden="true"></span>
-          <span class="visuallyhidden">Wyloguj się</span>
-        </a>
-      </li>
-    </ul>
-  </header>
-
-  <main class="main" role="main" id="main">
-
+{% extends "base.html" %}
+{% block title %} Wystawa {% endblock %}
+{% block content %}
     <section class="artwork">
-        <a class="artwork__link" href="assets/images/showcase_img_2.jpg">
-          <img src="assets/images/showcase_img_2.jpg" class="artwork__image">
+        <a class="artwork__link" href="{{ url_for('static', filename='assets/images/' + artwork.picture[0].name) }}">
+          <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[0].name) }}" class="artwork__image">
         </a>
         <div class="artwork__description">
           <dl class="informations">
-            <dt class="informations__title">Tytuł</th>
-            <dd class="informations__definition">Lorem ipsum</dd>
-            <dt class="informations__title">Autor</th>
-            <dd class="informations__definition">Lorem ipsum</dd>
-            <dt class="informations__title">Wymiary</th>
-            <dd class="informations__definition">Lorem ipsum</dd>
-            <dt class="informations__title">Technika</th>
-            <dd class="informations__definition">Lorem ipsum</dd>
-            <dt class="informations__title">Opis</th>
-            <dd class="informations__definition">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem illo fuga, molestias sit inventore eius, dignissimos alias sint nemo eaque, voluptas voluptatem similique aperiam voluptatibus consequatur.</dd>
-            <dt class="informations__title">Rok powstania</th>
-            <dd class="informations__definition">Lorem ipsum</dd>
+            <dt class="informations__title">Tytuł</dt>
+            <dd class="informations__definition">{{ artwork.title }}</dd>
+            <dt class="informations__title">Autor</dt>
+            <dd class="informations__definition">{{ artwork.author_name }} {{ artwork.author_surname }}</dd>
+            <dt class="informations__title">Wymiary</dt>
+            <dd class="informations__definition">{{ artwork.size }}</dd>
+            <dt class="informations__title">Technika</dt>
+            <dd class="informations__definition">{{ artwork.technique }}</dd>
+            <dt class="informations__title">Opis</dt>
+            <dd class="informations__definition">{{ artwork.description }}</dd>
+            <dt class="informations__title">Rok powstania</dt>
+            <dd class="informations__definition">{{ artwork.year }}</dd>
           </dl>
 
 
         <div class="rating">
           <div class="rating__average">
             <p class="rating__title">Średnia ocena użytkowników:</p>
-            <p class="rating__number"><span class="rating__icon">★</span> 5.7</p>
+            <p class="rating__number"><span class="rating__icon rating__icon--lg">★</span> {{ average_grade }}</p>
           </div>
-         <div class="rating__add">
-          <form class="rating__scale" action="#">
-            <input class="rating__item" type="radio" id="grade_1" name="grade" value="1" />
-              <label class = "rating__label" for="grade_1" title="1 gwiadka">
-                <span class="icon-star rating__star"></span>
-              </label>
-            <input class="rating__item" type="radio" id="grade_2" name="grade" value="2" />
-            <label class = "rating__label" for="grade_2" title="2 gwiazdki">
-                <span class="icon-star rating__star"></span>
-            </label>
-            <input class="rating__item" type="radio" id="grade_3" name="grade" value="3" />
-              <label class = "rating__label" for="grade_3" title="3 gwiazdki">
-                <span class="icon-star rating__star"></span>
-              </label>
-            <input class="rating__item" type="radio" id="grade_4" name="grade" value="4" />
-              <label class = "rating__label" for="grade_4" title="4 gwiazdki">
-                <span class="icon-star rating__star"></span>
-              </label>
-            <input class="rating__item" type="radio" id="grade_5" name="grade" value="5" />
-            <label class = "rating__label" for="grade_5" title="5 gwiazdek">
-              <span class="icon-star icon-star rating__star"></span>
-            </label>
-            <div class="rating__button">
-              <button class="profile__button profile__button--save" type="submit">Oceń</button>
-            </div>
-          </form>
-        </div>
+          {% if g.user.is_authenticated %}
+              <div class="rating__add">
+                  {% if rated %}
+                    <p class="rating__title">Twoja ocena to: <span class="rating__icon rating__icon--sm">★</span>{{ rated_grade }}</p>
+                  {% endif %}
+                  <form class="rating__scale" method="post" action={{ url_for('grade', artwork_id=artwork_id) }}>
+                    <input class="rating__item" type="radio" id="grade_1" name="grade" value="5" />
+                      <label class = "rating__label" for="grade_1" title="5 gwiazdek">
+                        <span class="icon-star rating__star"></span>
+                      </label>
+                    <input class="rating__item" type="radio" id="grade_2" name="grade" value="4" />
+                    <label class = "rating__label" for="grade_2" title="4 gwiazdki">
+                        <span class="icon-star rating__star"></span>
+                    </label>
+                    <input class="rating__item" type="radio" id="grade_3" name="grade" value="3" />
+                      <label class = "rating__label" for="grade_3" title="3 gwiazdki">
+                        <span class="icon-star rating__star"></span>
+                      </label>
+                    <input class="rating__item" type="radio" id="grade_4" name="grade" value="2" />
+                      <label class = "rating__label" for="grade_4" title="2 gwiazdki">
+                        <span class="icon-star rating__star"></span>
+                      </label>
+                    <input class="rating__item" type="radio" id="grade_5" name="grade" value="1" />
+                    <label class = "rating__label" for="grade_5" title="1 gwiazdka">
+                      <span class="icon-star icon-star rating__star"></span>
+                    </label>
+                    <div class="rating__button">
+                      <button class="profile__button profile__button--save" type="submit">{% if not rated %} Oceń {% elif rated %} Oceń ponownie {% endif %}</button>
+                    </div>
+                  </form>
+              </div>
+          {% else %}
+            <p>Zaloguj się aby móc oceniać i dodawać komentarze</p>
+          {% endif %}
       </div>
-
-        <div class="favourite">
-          <span class="favourite__entry">Dodaj obraz do ulubionych</span>
-          <form class="favourite__add" action="#">
-            <input class="favourite__item" type="submit" id="favouriteElement" name="favourite" value="1" />
-            <label class = "favourite__label" for="favouriteElement" title="Add to favourites">
-              <span class="favourite__icon icon-heart"></span>
-            </label>
-          </form>
-        </div>
+        {% if g.user.is_authenticated %}
+            <div class="favourite">
+              {% if favourited %}
+                  <span class="favourite__entry">Usuń obiekt z ulubionych</span>
+              {% elif not favourited %}
+                  <span class="favourite__entry">Dodaj obiekt do ulubionych</span>
+              {% endif %}
+              <form class="favourite__add" method="post" action={{ url_for('favourite', artwork_id=artwork_id) }}>
+                <input class="favourite__item" type="submit" id="favouriteElement" name="favourite" value="1" />
+                <label class = "favourite__label {% if favourited %} favourite__label--active {% elif not favourited %} favourite__label--disactive{% endif %}" for="favouriteElement" title="Add to favourites">
+                  <span class="favourite__icon icon-heart"></span>
+                </label>
+              </form>
+            </div>
+        {% endif %}
       </div>
     </section>
 
@@ -123,28 +84,28 @@
       <h2 class="details__header">Detale</h2>
       <div class="detail">
         <div class="detail__item">
-          <a href="assets/images/showcase_img_2.jpg" data-rel="lightcase:details" class="detail__link">
-            <img src="assets/images/showcase_img_2.jpg" class="detail__image">
+          <a href="{{ url_for('static', filename='assets/images/' + artwork.picture[1].name) }}" data-rel="lightcase:details" class="detail__link">
+            <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[1].name) }}" class="detail__image">
           </a>
         </div>
         <div class="detail__description">
-          <p class="detail__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Placeat blanditiis, at, corporis quam unde nobis neque cum aliquam expedita ipsa suscipit dolor officia dignissimos id, atque nam magnam a maxime.</p>
+          <p class="detail__text">{{ artwork.detail_1 }}</p>
         </div>
       </div>
       <div class="detail">
         <div class="detail__item">
-          <a href="assets/images/showcase_img_2.jpg" data-rel="lightcase:details" class="detail__link">
-            <img src="assets/images/showcase_img_2.jpg" class="detail__image">
+          <a href="{{ url_for('static', filename='assets/images/' + artwork.picture[2].name) }}" data-rel="lightcase:details" class="detail__link">
+            <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[2].name) }}" class="detail__image">
           </a>
         </div>
         <div class="detail__description">
-          <p class="detail__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro laboriosam esse alias aspernatur ducimus. Deleniti magni beatae earum illum minima quia et cum, officiis voluptatibus qui blanditiis ab provident aut!</p>
+          <p class="detail__text">{{ artwork.detail_2 }}</p>
         </div>
       </div>
     </section>
 
     <div class="return">
-      <a href="" class="return__link">
+      <a href="{{url_for('exhibition', exhibition_id = artwork.exhibition.id)}}" class="return__link">
         <span class="icon-chevron-left return__icon" aria-hidden="true"></span>
         <span class="return__item">Powrót</span>
       </a>
@@ -152,54 +113,27 @@
 
     <section class="comments">
       <h2 class="comments__header">Komentarze</h2>
+      {% if g.user.is_authenticated %}
         <div class="comments__add">
-          <form class="comments__form" action="#">
-            <textarea class="comments__content" id="commentsElement" name="comment" placeholder="What are you doing right now?" ></textarea>
+          <form class="comments__form" method="post" action={{ url_for('comment', artwork_id=artwork_id) }}>
+            <textarea class="comments__content" id="content" name="content" placeholder="What are you doing right now?" ></textarea>
               <button type="submit" class="comments__button">
                 <span class="comments__icon icon-plus"></span>
                   Dodaj komentarz
               </button>
           </form>
         </div>
+      {% endif %}
         <h3 class="container__header">Dodane</h3>
         <div class="container">
+        {% for comment in artwork_comments %}
           <div class="container__comment">
             <div class="container__content">
-              <p class="container__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem illo fuga, molestias sit inventore eius, dignissimos alias sint nemo eaque, voluptas voluptatem similique aperiam voluptatibus consequatur.</p>
+              <p class="container__text">{{ comment.content }}</p>
             </div>
-            <p class="container__item">Jadwiga Legutko, 05.05.2000</p>
+            <p class="container__item"><a href="{{ url_for('profile', user_id=comment.user.id)}}">{{ comment.user.username }}</a>, {{ comment.date }}</p>
           </div>
-          <div class="container__comment">
-            <div class="container__content">
-              <p class="container__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem illo fuga, molestias sit inventore eius, dignissimos alias sint nemo eaque, voluptas voluptatem similique aperiam voluptatibus consequatur.</p>
-            </div>
-            <p class="container__item">Jadwiga Legutko, 05.05.2000</p>
-          </div>
-          <div class="container__comment">
-            <div class="container__content">
-              <p class="container__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem illo fuga, molestias sit inventore eius, dignissimos alias sint nemo eaque, voluptas voluptatem similique aperiam voluptatibus consequatur.</p>
-            </div>
-            <p class="container__item">Jadwiga Legutko, 05.05.2000</p>
-          </div>
+        {% endfor %}
         </div>
     </section>
-
-  </main>
-
-  <footer class="footer">
-    <span class="footer__item footer__item--year">Legutko &copy; 2018 </span>
-    <span class="footer__item footer__item--informations">Autorem niniejszego serwisu jest Jadwiga Legutko. Serwis ten stanowi integralną część pracy licencjackiej (kierunek: Elektroniczne Przetwarzanie Informacji), przygotowanej pod kierunkiem dr. hab. Grzegorza Bilińskiego, prof. ASP na Wydziale Zarządzania i Komunikacji Społecznej Uniwersytetu Jagiellońskiego. Autor nie jest odpowiedzialny za publikowane na stronie komentarze.</span>
-    <a href="" class="footer__item footer__item--link">Bibliografia
-      <span class="icon-arrow-right footer__icon"></span>
-    </a>
-  </footer>
-
-  <script src="assets/javascript/jquery.js"></script>
-  <script src="assets/javascript/lightcase.js"></script>
-  <script src="assets/javascript/smooth-scroll.polyfills.js"></script>
-  <script src="assets/javascript/scrollreveal.js"></script>
-  <script src="assets/javascript/scrollspy.js"></script>
-  <script src="assets/javascript/wra.js"></script>
-
-</body>
-</html>
+{% endblock %}

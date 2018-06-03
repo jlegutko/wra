@@ -13,7 +13,7 @@
 <body class="page-home">
 
   <header class="navbar">
-      <a class="logo" href="">
+      <a class="logo" href="{{ url_for('index') }}">
           <h1 class="logo__title">White Red Art</h1>
           <img class="logo__image" src="{{ url_for('static', filename="assets/images/logo.svg") }}" alt="logo">
       </a>
@@ -24,29 +24,38 @@
       <nav class="navigation" id="menuElement">
           <ul class="menu menu--primary">
               <li class="menu__item">
-                  <a href="#" class="menu__link">Historia</a>
+                  <a href="{{ url_for('index') }}" class="menu__link">Historia</a>
               </li>
               <li class="menu__item">
-                  <a href="#" class="menu__link">Inspiracje</a>
+                  <a href="{{ url_for('inspirations') }}" class="menu__link">Inspiracje</a>
               </li>
               <li class="menu__item">
-                  <a href="#" class="menu__link">O serwisie</a>
+                  <a href="{{ url_for('about') }}" class="menu__link">O serwisie</a>
               </li>
           </ul>
       </nav>
       <ul class="menu">
+      {% if g.user.is_authenticated %}
           <li class="menu__item">
-              <a href="" class="menu__link menu__link--icon" title="Profil">
+              <a href="{{ url_for('profile', user_id = g.user.id) }}" class="menu__link menu__link--icon" title="Profil">
                   <span class="icon-user" aria-hidden="true"></span>
                   <span class="visuallyhidden">Profil</span>
               </a>
           </li>
           <li class="menu__item">
-              <a href="" class="menu__link menu__link--icon" title="Profil">
+              <a href="{{ url_for('logout') }}" class="menu__link menu__link--icon" title="Profil">
                   <span class="icon-log-out" aria-hidden="true"></span>
                   <span class="visuallyhidden">Wyloguj się</span>
               </a>
           </li>
+      {% else %}
+          <li class="menu__item">
+              <a href="{{ url_for('register') }}" class="menu__link" title="Profil">Rejestracja</a>
+          </li>
+          <li class="menu__item">
+              <a href="{{ url_for('login') }}" class="menu__link" title="Profil">Logowanie</a>
+          </li>
+      {% endif %}
       </ul>
   </header>
   <main class="main" role="main" id="main">
@@ -55,7 +64,7 @@
   <footer class="footer">
       <span class="footer__item footer__item--year">Legutko &copy; 2018 </span>
       <span class="footer__item footer__item--informations">Autorem niniejszego serwisu jest Jadwiga Legutko. Serwis ten stanowi integralną część pracy licencjackiej (kierunek: Elektroniczne Przetwarzanie Informacji), przygotowanej pod kierunkiem dr. hab. Grzegorza Bilińskiego, prof. ASP na Wydziale Zarządzania i Komunikacji Społecznej Uniwersytetu Jagiellońskiego.</span>
-      <a href="" class="footer__item footer__item--link">Bibliografia
+      <a href="{{ url_for('bibliography') }}" class="footer__item footer__item--link">Bibliografia
           <span class="icon-arrow-right footer__icon"></span>
       </a>
   </footer>

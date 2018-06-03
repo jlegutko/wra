@@ -8,9 +8,15 @@ class User(db.Model):
     username = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(255), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
-    role = db.relationship('Role', backref=db.backref('user', lazy=True))
+    profile = db.relationship('Profile', backref=db.backref('user', lazy=True), cascade="all, delete-orphan", single_parent=True)
+    comment = db.relationship('Comment', backref=db.backref('user', lazy=True), cascade="all, delete-orphan",
+                              single_parent=True)
+    grade = db.relationship('Grade', backref=db.backref('user', lazy=True), cascade="all, delete-orphan",
+                              single_parent=True)
+    favourite = db.relationship('Favourite', backref=db.backref('user', lazy=True), cascade="all, delete-orphan",
+                              single_parent=True)
 
-    def __init__(self, username, password, role_id=1):
+    def __init__(self, username=None, password=None, role_id=2):
         self.username = username
         self.password = password
         self.role_id = role_id
@@ -25,22 +31,23 @@ class User(db.Model):
         return False
 
     def get_id(self):
-        return str(self.id)
+        return self.id
 
     def __repr__(self):
-        return self.username
+        return str(self.id)
 
 
 class Role(db.Model):
     __tablename__ = 'role'
     id = db.Column('id', db.Integer, primary_key=True)
     name = db.Column(db.String(150))
+    user = db.relationship('User', backref=db.backref('role', lazy=True), cascade="all, delete-orphan", single_parent=True)
 
-    def __init__(self, name):
+    def __init__(self, name=None):
         self.name = name
 
     def __repr__(self):
-        return self.id
+        return self.name
 
 
 class Profile(db.Model):
@@ -51,9 +58,8 @@ class Profile(db.Model):
     email = db.Column(db.String(155), nullable=False)
     phone = db.Column(db.String(10), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('profile', lazy=True))
 
-    def __init__(self, name, surname, email, phone, user_id):
+    def __init__(self, name=None, surname=None, email=None, phone=None, user_id=None):
         self.name = name
         self.surname = surname
         self.email = email
@@ -61,7 +67,7 @@ class Profile(db.Model):
         self.user_id = user_id
 
     def __repr__(self):
-        return self.id
+        return str(self.id)
 
 
 class Artwork(db.Model):
@@ -77,9 +83,17 @@ class Artwork(db.Model):
     detail_1 = db.Column(db.Text, nullable=False)
     detail_2 = db.Column(db.Text, nullable=False)
     exhibition_id = db.Column(db.Integer, db.ForeignKey('exhibition.id'), nullable=False)
-    exhibition = db.relationship('Exhibition', backref=db.backref('artwork', lazy=True))
+    picture = db.relationship('Picture', backref=db.backref('artwork', lazy=True), cascade="all, delete-orphan",
+                              single_parent=True)
+    comment = db.relationship('Comment', backref=db.backref('artwork', lazy=True), cascade="all, delete-orphan",
+                              single_parent=True)
+    grade = db.relationship('Grade', backref=db.backref('artwork', lazy=True), cascade="all, delete-orphan",
+                              single_parent=True)
+    favourite = db.relationship('Favourite', backref=db.backref('artwork', lazy=True), cascade="all, delete-orphan",
+                              single_parent=True)
 
-    def __init__(self, title, author_name, author_surname, year, description, detail_1, detail_2, exhibition_id, technique=None, size=None):
+    def __init__(self, title=None, author_name=None, author_surname=None, year=None, description=None, detail_1=None,
+                 detail_2=None, exhibition_id=None, technique=None, size=None):
         self.title = title
         self.author_name = author_name
         self.author_surname = author_surname
@@ -102,15 +116,16 @@ class Exhibition(db.Model):
     date = db.Column(db.Date)
     title = db.Column(db.String(300), nullable=False)
     description = db.Column(db.Text, nullable=False)
+    artwork = db.relationship('Artwork', backref=db.backref('exhibition', lazy=True), cascade="all, delete-orphan", single_parent=True)
 
-    def __init__(self, year, title, description, date=None):
+    def __init__(self, year=None, title=None, description=None, date=None):
         self.year = year
         self.date = date
         self.title = title
         self.description = description
 
     def __repr__(self):
-        return '<User %r>' % self.title
+        return self.title
 
 
 class Picture(db.Model):
@@ -119,11 +134,9 @@ class Picture(db.Model):
     name = db.Column(db.String(255), nullable=False)
     alt = db.Column(db.String(255), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
-    category = db.relationship('Category', backref=db.backref('picture', lazy=True))
     artwork_id = db.Column(db.Integer, db.ForeignKey('artwork.id'), nullable=False)
-    artwork = db.relationship('Artwork', backref=db.backref('picture', lazy=True))
 
-    def __init__(self, name, alt, category_id, artwork_id):
+    def __init__(self, name=None, alt=None, category_id=None, artwork_id=None):
         self.name = name
         self.alt = alt
         self.category_id = category_id
@@ -137,12 +150,14 @@ class Category(db.Model):
     __tablename__ = 'category'
     id = db.Column('id', db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
+    picture = db.relationship('Picture', backref=db.backref('category', lazy=True), cascade="all, delete-orphan",
+                              single_parent=True)
 
-    def __init__(self, name):
+    def __init__(self, name=None):
         self.name = name
 
     def __repr__(self):
-        return '<User %r>' % self.name
+        return self.name
 
 
 class Comment(db.Model):
@@ -151,11 +166,9 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)
     date = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('comment', lazy=True))
     artwork_id = db.Column(db.Integer, db.ForeignKey('artwork.id'), nullable=False)
-    artwork = db.relationship('Artwork', backref=db.backref('comment', lazy=True))
 
-    def __init__(self, content, user_id, artwork_id):
+    def __init__(self, content=None, user_id=None, artwork_id=None):
         self.content = content
         self.user_id = user_id
         self.artwork_id = artwork_id
@@ -169,11 +182,9 @@ class Grade(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     grade = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('grade', lazy=True))
     artwork_id = db.Column(db.Integer, db.ForeignKey('artwork.id'), nullable=False)
-    artwork = db.relationship('Artwork', backref=db.backref('grade', lazy=True))
 
-    def __init__(self, grade, user_id, artwork_id):
+    def __init__(self, grade=None, user_id=None, artwork_id=None):
         self.grade = grade
         self.user_id = user_id
         self.artwork_id = artwork_id
@@ -186,11 +197,9 @@ class Favourite(db.Model):
     __tablename__='favourite'
     id = db.Column('id', db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('favourite', lazy=True))
     artwork_id = db.Column(db.Integer, db.ForeignKey('artwork.id'), nullable=False)
-    artwork = db.relationship('Artwork', backref=db.backref('favourite', lazy=True))
 
-    def __init__(self, user_id, artwork_id):
+    def __init__(self, user_id=None, artwork_id=None):
         self.user_id = user_id
         self.artwork_id = artwork_id
 
@@ -206,7 +215,7 @@ class About(db.Model):
     picture_name = db.Column(db.String(255))
     picture_alt = db.Column(db.String(255))
 
-    def __init__(self, title, description, picture_name=None, picture_alt=None):
+    def __init__(self, title=None, description=None, picture_name=None, picture_alt=None):
         self.title = title
         self.description = description
         self.picture_name = picture_name
@@ -222,7 +231,7 @@ class Inspiration(db.Model):
     title = db.Column(db.String(255), nullable=False)
     url = db.Column(db.String(300), nullable=False)
 
-    def __init__(self, title, url):
+    def __init__(self, title=None, url=None):
         self.title = title
         self.url = url
 
@@ -242,7 +251,8 @@ class PrintedSource(db.Model):
     publisher = db.Column(db.String(200), nullable=False)
     year = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, publisher, year, title, author=None, translation=None, collection=None, edit=None, joint_publication=False):
+    def __init__(self, publisher=None, year=None, title=None, author=None, translation=None, collection=None, edit=None,
+                 joint_publication=False):
         self.author = author
         self.joint_publication = joint_publication
         self.title = title
@@ -266,7 +276,7 @@ class OnlineSource(db.Model):
     url = db.Column(db.String(300), nullable=False)
     access = db.Column(db.Date, nullable=False)
 
-    def __init__(self, title, url, access, author=None, publisher=None, date=None):
+    def __init__(self, title=None, url=None, access=None, author=None, publisher=None, date=None):
         self.author = author
         self.title = title
         self.publisher = publisher
@@ -287,7 +297,7 @@ class ImageSource(db.Model):
     url = db.Column(db.String(300), nullable=False)
     access = db.Column(db.Date, nullable=False)
 
-    def __init__(self, title, description, url, access, author=None):
+    def __init__(self, title=None, description=None, url=None, access=None, author=None):
         self.title = title
         self.description = description
         self.author = author

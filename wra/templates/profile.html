@@ -1,307 +1,122 @@
-<!DOCTYPE html>
-<html lang="en" class="no-js">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>White Red Art</title>
-  <link rel="stylesheet" href="css/wra.css">
-  <script>document.documentElement.className=document.documentElement.className.replace(/\bno-js\b/,'') + ' js';</script>
-</head>
-
-<body class="page-profile">
-
-  <header class="navbar">
-    <a class="logo" href="">
-      <h1 class="logo__title">White Red Art</h1>
-      <img class="logo__image" src="assets/images/logo.svg" alt="logo">
-    </a>
-    <button class="navbar__button" id="menuButton">
-        <span class="icon-menu" aria-hidden="true"></span>
-        <span class="visuallyhidden">Menu</span>
-    </button>
-    <nav class="navigation" id="menuElement">
-      <ul class="menu menu--primary">
-        <li class="menu__item">
-          <a href="index.html" class="menu__link">Historia</a>
-        </li>
-        <li class="menu__item">
-          <a href="#" class="menu__link">Inspiracje</a>
-        </li>
-        <li class="menu__item">
-          <a href="#" class="menu__link">O serwisie</a>
-        </li>
-      </ul>
-   </nav>
-    <ul class="menu">
-      <li class="menu__item">
-        <a href="" class="menu__link menu__link--icon" title="Profil">
-          <span class="icon-user" aria-hidden="true"></span>
-          <span class="visuallyhidden">Profil</span>
-        </a>
-      </li>
-      <li class="menu__item">
-        <a href="" class="menu__link menu__link--icon" title="Profil">
-          <span class="icon-log-out" aria-hidden="true"></span>
-          <span class="visuallyhidden">Wyloguj się</span>
-        </a>
-      </li>
-    </ul>
-  </header>
-
-  <main class="main" role="main" id="main">
-    <section class="board">
-
+{% extends "base.html" %}
+{% block title %} Profil {% endblock %}
+{% block content %}
+    <section class="center center--profile">
+    {% if g.user.id == user_id %}
       <nav class="panel">
         <div class="panel__menu">
           <ul class="user">
             <a href="#profile" class="user__link">
               <li class="user__item user__item">
                 <span class="user__icon icon-user" aria-hidden="true"></span>
-                Mój profil</li>
+                Mój profil
+              </li>
             </a>
             <a href="#favourites" class="user__link">
               <li class="user__item user__item">
                 <span class="user__icon icon-heart" aria-hidden="true"></span>
-                Ulubione</li>
+                Ulubione
+              </li>
             </a>
             <a href="#rating" class="user__link">
               <li class="user__item user__item">
                 <span class="user__icon icon-star" aria-hidden="true"></span>
-                Ocenione</li>
+                Ocenione
+              </li>
             </a>
           </ul>
         </div>
       </nav>
+    {% endif %}
 
       <section class="content">
         <div class="content__profile">
           <div class="content__header" id="profile">
             <h3 class="content__entry">Profil</h3>
-
-            <ul class="content__options">
-              <li class="content__item">
-                <a href="edit_profile.html" class="content__link">
-                  <span class="content__icon icon-edit" aria-hidden="true"></span>Edytuj dane
-                </a>
-              </li>
-              <li class="content__item">
-                <a href="change_pswd.html" class="content__link">
-                  <span class="content__icon icon-lock" aria-hidden="true"></span>Zmień hasło
-                </a>
-              </li>
-              <li class="content__item">
-                <a href="delete_profile.html" class="content__link">
-                  <span class="content__icon icon-user-x" aria-hidden="true"></span>Usuń konto
-                </a>
-              </li>
-            </ul>
+            {% if g.user.id == user_id %}
+                <ul class="content__options">
+                  <li class="content__item">
+                    <a href="edit_profile.html" class="content__link">
+                      <span class="content__icon icon-edit" aria-hidden="true"></span>Edytuj dane
+                    </a>
+                  </li>
+                  <li class="content__item">
+                    <a href="change_pswd.html" class="content__link">
+                      <span class="content__icon icon-lock" aria-hidden="true"></span>Zmień hasło
+                    </a>
+                  </li>
+                  <li class="content__item">
+                    <a href="delete_profile.html" class="content__link">
+                      <span class="content__icon icon-user-x" aria-hidden="true"></span>Usuń konto
+                    </a>
+                  </li>
+                </ul>
+            {% endif %}
           </div>
           <div class="profile">
             <div class="profile__header">
               <span class="profile__icon profile__icon--bg icon-user" aria-hidden="true"></span>
-              <p class="profile__username">jlegutko</p>
+              <p class="profile__username">{{ user.username }}</p>
             </div>
             <dl class="profile__informations">
               <dt class="profile__item">Imię i nazwisko</dt>
               <dd class="profile__area">
                 <span class="profile__icon profile__icon--sm icon-user"></span>
-                <p class="profile__data">Jadwiga Legutko</p>
+                <p class="profile__data">{{ profile.name }} {{ profile.surname }}</p>
               </dd>
               <dt class="profile__item">E-mail</dt>
               <dd class="profile__area">
                 <span class="profile__icon profile__icon--sm icon-mail"></span>
-                <p class="profile__data">jlegutko3@example.com</p>
+                <p class="profile__data">{{ profile.email }}</p>
               </dd>
               <dt class="profile__item">Telefon</dt>
               <dd class="profile__area">
                 <span class="profile__icon profile__icon--sm icon-phone"></span>
-                <p class="profile__data">798-112-760</p>
+                <p class="profile__data">{{ profile.phone }}</p>
               </dd>
             </dl>
           </div>
         </div>
+
         <div class="content__favourite">
           <div class="content__header" id="favourites">
             <h3 class="content__entry">Ulubione</h3>
           </div>
           <div class="favourites">
-            <div class="favourites__column">
-              <a href="#" class="favourites__link">
-                <div class="favourites__item">
-                  <span class="favourites__icon icon-heart"></span>
-                  <img src="assets/images/showcase_img_2.jpg" class="favourites__image">
-                </div>
-              </a>
-              <a href="#" class="favourites__link">
-                <div class="favourites__item">
-                  <span class="favourites__icon icon-heart"></span>
-                  <img src="assets/images/showcase_img_3.jpg" class="favourites__image">
-                </div>
-              </a>
-              <a href="#" class="favourites__link">
-                <div class="favourites__item">
-                  <span class="favourites__icon icon-heart"></span>
-                  <img src="assets/images/showcase_img_4.jpg" class="favourites__image">
-                </div>
-              </a>
-            </div>
-            <div class="favourites__column">
-              <a href="#" class="favourites__link">
-                <div class="favourites__item">
-                  <span class="favourites__icon icon-heart"></span>
-                  <img src="assets/images/showcase_img_4.jpg" class="favourites__image">
-                </div>
-              </a>
-              <a href="#" class="favourites__link">
-                <div class="favourites__item">
-                  <span class="favourites__icon icon-heart"></span>
-                  <img src="assets/images/showcase_img_4.jpg" class="favourites__image">
-                </div>
-              </a>
-              <a href="#" class="favourites__link">
-                <div class="favourites__item">
-                  <span class="favourites__icon icon-heart"></span>
-                  <img src="assets/images/showcase_img_3.jpg" class="favourites__image">
-                </div>
-              </a>
-            </div>
-            <div class="favourites__column">
-              <a href="#" class="favourites__link">
-                <div class="favourites__item">
-                  <span class="favourites__icon icon-heart"></span>
-                  <img src="assets/images/showcase_img_2.jpg" class="favourites__image">
-                </div>
-              </a>
-              <a href="#" class="favourites__link">
-                <div class="favourites__item">
-                  <span class="favourites__icon icon-heart"></span>
-                  <img src="assets/images/showcase_img_2.jpg" class="favourites__image">
-                </div>
-              </a>
-              <a href="#" class="favourites__link">
-                <div class="favourites__item">
-                  <span class="favourites__icon icon-heart"></span>
-                  <img src="assets/images/showcase_img_3.jpg" class="favourites__image">
-                </div>
-              </a>
-            </div>
-            <div class="favourites__column">
-              <a href="#" class="favourites__link">
-                <div class="favourites__item">
-                  <span class="favourites__icon icon-heart"></span>
-                  <img src="assets/images/showcase_img_2.jpg" class="favourites__image">
-                </div>
-              </a>
-              <a href="#" class="favourites__link">
-                <div class="favourites__item">
-                  <span class="favourites__icon icon-heart"></span>
-                  <img src="assets/images/showcase_img_2.jpg" class="favourites__image">
-                </div>
-              </a>
-              <a href="#" class="favourites__link">
-                <div class="favourites__item">
-                  <span class="favourites__icon icon-heart"></span>
-                  <img src="assets/images/showcase_img_2.jpg" class="favourites__image">
-                </div>
-              </a>
-            </div>
+              {% for favourite in favourites %}
+                  <a href="{{ url_for('artwork', artwork_id = favourite.artwork.id) }}" class="favourites__link">
+                    <div class="favourites__item">
+                      <span class="favourites__icon icon-heart"></span>
+                      <img src="{{ url_for('static', filename='assets/images/' + favourite.artwork.picture[0].name) }}" class="favourites__image">
+                    </div>
+                  </a>
+              {% endfor %}
           </div>
         </div>
+
         <div class="content__rating">
           <div class="content__header" id="rating">
             <h3 class="content__entry">Ocenione</h3>
           </div>
           <div class="ratings">
             <ul class="gallery">
+            {% for grade in grades %}
               <li class="gallery__item">
-                <a href="artwork.html" class="gallery__link">
-                  <img src="assets/images/showcase_img_2.jpg" class="gallery__img">
+                <a href="{{ url_for('artwork', artwork_id = grade.artwork.id) }}" class="gallery__link">
+                  <img src="{{ url_for('static', filename='assets/images/' + grade.artwork.picture[0].name) }}" class="gallery__img">
                 </a>
                 <div class="ratings__stars">
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
+                  {% set star = '<span class="ratings__icon icon-star"></span>' %}
+                  <span class="visuallyhidden">Ocena: {{ grade.grade }}</span>
+                  {{ star|safe * grade.grade }}
                 </div>
               </li>
-              <li class="gallery__item">
-                <a href="artwork.html" class="gallery__link">
-                  <img src="assets/images/showcase_img_2.jpg" class="gallery__img">
-                </a>
-                <div class="ratings__stars">
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                </div>
-              </li>
-              <li class="gallery__item">
-                <a href="artwork.html" class="gallery__link">
-                  <img src="assets/images/showcase_img_2.jpg" class="gallery__img">
-                </a>
-                <div class="ratings__stars">
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                </div>
-              </li>
-              <li class="gallery__item">
-                <a href="artwork.html" class="gallery__link">
-                  <img src="assets/images/showcase_img_2.jpg" class="gallery__img">
-                </a>
-                <div class="ratings__stars">
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                </div>
-              </li>
-              <li class="gallery__item">
-                <a href="artwork.html" class="gallery__link">
-                  <img src="assets/images/showcase_img_2.jpg" class="gallery__img">
-                </a>
-                <div class="ratings__stars">
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                  <span class="ratings__icon icon-star"></span>
-                </div>
-              </li>
+            {% endfor %}
             </ul>
           </div>
         </div>
       </section>
 
     </section>
-  </main>
+{% endblock %}
 
-  <footer class="footer">
-    <span class="footer__item footer__item--year">Legutko &copy; 2018 </span>
-    <span class="footer__item footer__item--informations">Autorem niniejszego serwisu jest Jadwiga Legutko. Serwis ten stanowi integralną część pracy licencjackiej (kierunek: Elektroniczne Przetwarzanie Informacji), przygotowanej pod kierunkiem dr. hab. Grzegorza Bilińskiego, prof. ASP na Wydziale Zarządzania i Komunikacji Społecznej Uniwersytetu Jagiellońskiego. Autor nie jest odpowiedzialny za publikowane na stronie komentarze.</span>
-    <a href="" class="footer__item footer__item--link">Bibliografia
-      <span class="icon-arrow-right footer__icon"></span>
-    </a>
-  </footer>
-
-  <script src="assets/javascript/jquery.js"></script>
-  <script src="assets/javascript/smooth-scroll.polyfills.js"></script>
-  <script src="assets/javascript/scrollreveal.js"></script>
-  <script src="assets/javascript/scrollspy.js"></script>
-  <script src="assets/javascript/lightcase.js"></script>
-  <script src="assets/javascript/wra.js"></script>
-
-</body>
-</html>

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %} Wystawa {% endblock %}
+{% block content %}
+    <section class="period">
+      <div class="period__description">
+        <h2 class="period__title">{{ exhibition.title }}</h2>
+        <p class="period__details">{{ exhibition.description }}</p>
+      </div>
+      <ul class="gallery">
+      {% for artwork in artworks %}
+          {% if artwork.exhibition == exhibition %}
+              <li class="gallery__item">
+                  <a href="{{url_for('artwork', artwork_id = artwork.id)}}" class="gallery__link">
+                        <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[0].name) }}" class="gallery__img">
+                        <div class="gallery__description">
+                              <h3 class="gallery__title">{{ artwork.title }}</h3>
+                              <p class="gallery__details">{{ artwork.author_name }} {{ artwork.author_surname }}</p>
+                        </div>
+                  </a>
+              </li>
+          {% endif %}
+      {% endfor %}
+      </ul>
+      </div>
+      <div class="nav">
+        {% if prev_exhibition != None %}
+            <a href="{{url_for('exhibition', exhibition_id = prev_exhibition.id)}}" class="nav__link nav__link--prev">
+              <span class="icon-chevron-left nav__icon" aria-hidden="true"></span>
+              <span class="nav__item">{{ prev_exhibition.year }} {{ prev_exhibition.title }}</span>
+            </a>
+        {% endif %}
+        {% if next_exhibition != None %}
+            <a href="{{url_for('exhibition', exhibition_id = next_exhibition.id)}}" class="nav__link nav__link--next">
+              <span class="nav__item">{{ next_exhibition.year }} {{ next_exhibition.title }}</span>
+              <span class="icon-chevron-right nav__icon" aria-hidden="true"></span>
+            </a>
+        {% endif %}
+      </div>
+    </section>
+{% endblock %}
+

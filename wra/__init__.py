@@ -4,11 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flaskext.markdown import Markdown
 
 
 app = Flask(__name__)
 
-
+Markdown(app, extensions=['footnotes'])
 # BCrypt
 bcrypt = Bcrypt(app)
 
@@ -19,12 +20,27 @@ app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
 
-from wra.models.Models import User
+from wra.models.Models import User, Role, Profile, Artwork, Exhibition, Picture, Category, Comment, Grade, Favourite, \
+    About, Inspiration, PrintedSource, OnlineSource, ImageSource
 
 
 # Administrator panel
 admin = Admin(app, name='admin_panel', template_mode='bootstrap3')
 admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Role, db.session))
+admin.add_view(ModelView(Profile, db.session))
+admin.add_view(ModelView(Artwork, db.session))
+admin.add_view(ModelView(Exhibition, db.session))
+admin.add_view(ModelView(Picture, db.session))
+admin.add_view(ModelView(Category, db.session))
+admin.add_view(ModelView(Comment, db.session))
+admin.add_view(ModelView(Grade, db.session))
+admin.add_view(ModelView(Favourite, db.session))
+admin.add_view(ModelView(About, db.session))
+admin.add_view(ModelView(Inspiration, db.session))
+admin.add_view(ModelView(PrintedSource, db.session))
+admin.add_view(ModelView(OnlineSource, db.session))
+admin.add_view(ModelView(ImageSource, db.session))
 
 
 # Login Manager

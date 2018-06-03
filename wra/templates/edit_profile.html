@@ -1,91 +1,41 @@
-<!DOCTYPE html>
-<html lang="en" class="no-js">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>White Red Art</title>
-  <link rel="stylesheet" href="css/wra.css">
-  <script>document.documentElement.className=document.documentElement.className.replace(/\bno-js\b/,'') + ' js';</script>
-</head>
-
-<body>
-
-  <header class="navbar">
-    <a class="logo" href="">
-      <h1 class="logo__title">White Red Art</h1>
-      <img class="logo__image" src="assets/images/logo.svg" alt="logo">
-    </a>
-    <button class="navbar__button" id="menuButton">
-        <span class="icon-menu" aria-hidden="true"></span>
-        <span class="visuallyhidden">Menu</span>
-    </button>
-    <nav class="navigation" id="menuElement">
-      <ul class="menu menu--primary">
-        <li class="menu__item">
-          <a href="#" class="menu__link">Historia</a>
-        </li>
-        <li class="menu__item">
-          <a href="#" class="menu__link">Inspiracje</a>
-        </li>
-        <li class="menu__item">
-          <a href="#" class="menu__link">O serwisie</a>
-        </li>
-      </ul>
-   </nav>
-    <ul class="menu">
-      <li class="menu__item">
-        <a href="" class="menu__link menu__link--icon" title="Profil">
-          <span class="icon-user" aria-hidden="true"></span>
-          <span class="visuallyhidden">Profil</span>
-        </a>
-      </li>
-      <li class="menu__item">
-        <a href="" class="menu__link menu__link--icon" title="Profil">
-          <span class="icon-log-out" aria-hidden="true"></span>
-          <span class="visuallyhidden">Wyloguj się</span>
-        </a>
-      </li>
-    </ul>
-  </header>
-
-  <main class="main" role="main" id="user">
+{% extends "base.html" %}
+{% block title %} Profil {% endblock %}
+{% block content %}
     <section class="center">
       <div class="center__container">
           <div class="content__profile">
             <div class="content__header">
               <h3 class="content__entry">Edytuj profil</h3>
             </div>
-            <form method="post" class="profile" action="#">
+            <form method="post" class="profile" action="{{ url_for('edit') }}">
               <div class="profile__header profile__header--input">
-                <label for="login" class="visuallyhidden">Login</label>
+                <label for="new_username" class="visuallyhidden">Login</label>
                 <span class="profile__icon profile__icon--bg icon-user" aria-hidden="true"></span>
-                <input class="profile__data profile__data--input" type="text" id="login" name="login" placeholder="jlegutko">
+                <input class="profile__data profile__data--input" type="text" id="new_username" name="new_username" value="{{ user.username }}">
               </div>
               <div class="profile__informations profile__informations--input">
-                <label for="name" class="profile__item profile__item--label">Imię</label>
+                <label for="new_name" class="profile__item profile__item--label">Imię</label>
                 <div class="profile__area profile__area--form">
                   <span class="profile__icon profile__icon--sm icon-user"></span>
-                  <input class="profile__data profile__data--input" type="text" id="name" name="name" placeholder="Jadwiga">
+                  <input class="profile__data profile__data--input" type="text" id="new_name" name="new_name" value="{{ profile.name }}">
                 </div>
 
-                <label for="lastname" class="profile__item profile__item--label">Nazwisko</label>
+                <label for="new_surname" class="profile__item profile__item--label">Nazwisko</label>
                 <div class="profile__area profile__area--form">
                   <span class="profile__icon profile__icon--sm icon-user"></span>
-                  <input class="profile__data profile__data--input" type="text" id="lastname" name="lastname" placeholder="Legutko">
+                  <input class="profile__data profile__data--input" type="text" id="new_surname" name="new_surname" value="{{ profile.surname }}">
                 </div>
 
-                <label for="email" class="profile__item profile__item--label">E-mail</label>
+                <label for="new_email" class="profile__item profile__item--label">E-mail</label>
                 <div class="profile__area profile__area--form">
                   <span class="profile__icon profile__icon--sm icon-mail"></span>
-                  <input class="profile__data profile__data--input" type="text" id="email" name="email" placeholder="jegutko3@example.com">
+                  <input class="profile__data profile__data--input" type="text" id="new_email" name="new_email" value="{{ profile.email }}">
                 </div>
 
-                <label for="phone" class="profile__item profile__item--label">Telefon</label>
+                <label for="new_phone" class="profile__item profile__item--label">Telefon</label>
                 <div class="profile__area profile__area--form">
                   <span class="profile__icon profile__icon--sm icon-phone"></span>
-                  <input class="profile__data profile__data--input" type="tel" id="phone" name="phone" placeholder="798-112-760">
+                  <input class="profile__data profile__data--input" type="tel" id="new_phone" name="new_phone" value="{{ profile.phone }}">
                 </div>
               </div>
               <div class="profile__buttons">
@@ -97,20 +47,5 @@
           </div>
         </div>
       </section>
-  </main>
+{% endblock %}
 
-  <footer class="footer">
-    <span class="footer__item footer__item--year">Legutko &copy; 2018 </span>
-    <span class="footer__item footer__item--informations">Autorem niniejszego serwisu jest Jadwiga Legutko. Serwis ten stanowi integralną część pracy licencjackiej (kierunek: Elektroniczne Przetwarzanie Informacji), przygotowanej pod kierunkiem dr. hab. Grzegorza Bilińskiego, prof. ASP na Wydziale Zarządzania i Komunikacji Społecznej Uniwersytetu Jagiellońskiego. Autor nie jest odpowiedzialny za publikowane na stronie komentarze.</span>
-    <a href="" class="footer__item footer__item--link">Bibliografia
-      <span class="icon-arrow-right footer__icon"></span>
-    </a>
-  </footer>
-
-  <script src="assets/javascript/smooth-scroll.polyfills.js"></script>
-  <script src="assets/javascript/scrollreveal.js"></script>
-  <script src="assets/javascript/scrollspy.js"></script>
-  <script src="assets/javascript/wra.js"></script>
-
-</body>
-</html>
