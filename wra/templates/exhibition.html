@@ -4,7 +4,7 @@
     <section class="period">
       <div class="period__description">
         <h2 class="period__title">{{ exhibition.title }}</h2>
-        <p class="period__details">{{ exhibition.description }}</p>
+        <p class="period__details">{{ exhibition.description|markdown }}</p>
       </div>
       <ul class="gallery">
       {% for artwork in artworks %}
@@ -14,7 +14,7 @@
                         <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[0].name) }}" class="gallery__img">
                         <div class="gallery__description">
                               <h3 class="gallery__title">{{ artwork.title }}</h3>
-                              <p class="gallery__details">{{ artwork.author_name }} {{ artwork.author_surname }}</p>
+                              <p class="gallery__details">{{ artwork.author }}</p>
                         </div>
                   </a>
               </li>

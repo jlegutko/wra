@@ -7,7 +7,10 @@ from flaskext.markdown import Markdown
 
 app = Flask(__name__)
 
+
 Markdown(app, extensions=['footnotes'])
+
+
 # BCrypt
 bcrypt = Bcrypt(app)
 

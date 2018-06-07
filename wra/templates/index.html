@@ -14,22 +14,24 @@
             </ul>
         </nav>
         {% for exhibition in exhibitions %}
+            {% set item=[0] %}
             <section class="year__item year__item--{{ exhibition.year }}" id="year{{ exhibition.year }}">
                 <div class="year__info">
-                    <ul class="showcase" id="showcase1">
-                    {% for artwork in artworks %}
-                        {% if artwork.exhibition == exhibition and loop.index<6 %}
-                            <li class="showcase__item showcase__item{% if loop.index==1 %}--lg{% elif loop.index==2 or loop.index==3 %}--md{% elif loop.index==4 or loop.index==5 %}--sm{% endif %}">
-                                <a href="" class="showcase__link">
-                                    <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[0].name) }}" class="showcase__img">
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
+                    <ul class="showcase" id="showcase{{ loop.index }}">
+                        {% for artwork in artworks %}
+                            {% if artwork.exhibition == exhibition and item[0]<5 %}
+                                {% if item.append(item.pop() + 1) %}{% endif %}
+                                    <li class="showcase__item showcase__item{% if item[0]==1 %}--lg{% elif item[0]==2 or item[0]==3 %}--md{% elif item[0]==4 or item[0]==5 %}--sm{% endif %}">
+                                        <a href="{{url_for('artwork', artwork_id = artwork.id)}}" class="showcase__link">
+                                            <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[0].name) }}" class="showcase__img">
+                                        </a>
+                                    </li>
+                            {% endif %}
+                        {% endfor %}
                     </ul>
                     <a href="{{url_for('exhibition', exhibition_id = exhibition.id)}}" class="description" title="Przejdź do sekcji">
                         <h2 class="description__title">{{ exhibition.title }}</h2>
-                        <p class="description__content">{{ exhibition.description }}</p>
+                        <p class="description__content">{% set list = exhibition.description %} {{ list[0:800] }}[...]</p>
                         <span class="description--icon icon-chevrons-right" aria-hidden="true"></span>
                         <span class="visuallyhidden">Przejdź do sekcji</span>
                     </a>

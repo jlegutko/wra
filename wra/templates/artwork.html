@@ -10,7 +10,7 @@
             <dt class="informations__title">Tytuł</dt>
             <dd class="informations__definition">{{ artwork.title }}</dd>
             <dt class="informations__title">Autor</dt>
-            <dd class="informations__definition">{{ artwork.author_name }} {{ artwork.author_surname }}</dd>
+            <dd class="informations__definition">{{ artwork.author }}</dd>
             <dt class="informations__title">Wymiary</dt>
             <dd class="informations__definition">{{ artwork.size }}</dd>
             <dt class="informations__title">Technika</dt>
@@ -80,29 +80,33 @@
       </div>
     </section>
 
-    <section class="details">
-      <h2 class="details__header">Detale</h2>
-      <div class="detail">
-        <div class="detail__item">
-          <a href="{{ url_for('static', filename='assets/images/' + artwork.picture[1].name) }}" data-rel="lightcase:details" class="detail__link">
-            <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[1].name) }}" class="detail__image">
-          </a>
-        </div>
-        <div class="detail__description">
-          <p class="detail__text">{{ artwork.detail_1 }}</p>
-        </div>
-      </div>
-      <div class="detail">
-        <div class="detail__item">
-          <a href="{{ url_for('static', filename='assets/images/' + artwork.picture[2].name) }}" data-rel="lightcase:details" class="detail__link">
-            <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[2].name) }}" class="detail__image">
-          </a>
-        </div>
-        <div class="detail__description">
-          <p class="detail__text">{{ artwork.detail_2 }}</p>
-        </div>
-      </div>
-    </section>
+    {% for artwork in artworks %}
+        {% if artwork.detail_1 and artwork.detail_2 %}
+            <section class="details">
+              <h2 class="details__header">Detale</h2>
+              <div class="detail">
+                <div class="detail__item">
+                  <a href="{{ url_for('static', filename='assets/images/' + artwork.picture[1].name) }}" data-rel="lightcase:details" class="detail__link">
+                    <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[1].name) }}" class="detail__image">
+                  </a>
+                </div>
+                <div class="detail__description">
+                  <p class="detail__text">{{ artwork.detail_1 }}</p>
+                </div>
+              </div>
+              <div class="detail">
+                <div class="detail__item">
+                  <a href="{{ url_for('static', filename='assets/images/' + artwork.picture[2].name) }}" data-rel="lightcase:details" class="detail__link">
+                    <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[2].name) }}" class="detail__image">
+                  </a>
+                </div>
+                <div class="detail__description">
+                  <p class="detail__text">{{ artwork.detail_2 }}</p>
+                </div>
+              </div>
+            </section>
+        {% endif %}
+    {% endfor %}
 
     <div class="return">
       <a href="{{url_for('exhibition', exhibition_id = artwork.exhibition.id)}}" class="return__link">

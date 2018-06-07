@@ -3,7 +3,6 @@ from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql import func
 from wra import db, app, login_manager, bcrypt
-from flask_admin.contrib.sqla import ModelView
 
 from flask_admin import Admin, AdminIndexView, helpers, expose
 from flask_admin.contrib.sqla import ModelView
@@ -20,7 +19,8 @@ def load_user(id):
 @app.before_request
 def before_request():
     g.user = current_user
-    g.page = request.url_rule.rule
+    if request.url_rule is not None:
+        g.page = request.url_rule.rule
 
 
 class WraAdminIndexView(AdminIndexView):
@@ -28,11 +28,13 @@ class WraAdminIndexView(AdminIndexView):
     Custom Admin View
     """
     @expose('/')
+    @login_required
     def index(self):
         """
 
         :return:
         """
+        g.page = '1'
         if current_user.role.name != 'admin':
             return redirect(url_for('index'))
         return super(WraAdminIndexView, self).index()
@@ -93,13 +95,21 @@ def artwork(artwork_id):
         average_grade = 0.0
     else:
         average_grade = round(average, 1)
+    if g.user.is_authenticated:
+        favourited = Favourite.query.filter_by(user_id=g.user.id, artwork_id=artwork_id).first()
+        rated = Grade.query.filter_by(user_id=g.user.id).filter_by(artwork_id=artwork_id).first()
+        if rated is not None:
+            rated_grade = round(float(rated.grade), 1)
 
-    favourited = Favourite.query.filter_by(user_id=g.user.id, artwork_id=artwork_id).first()
-    rated = Grade.query.filter_by(user_id=g.user.id).filter_by(artwork_id=artwork_id).first()
-    rated_grade = round(float(rated.grade), 1)
-
-    return render_template('artwork.html', artwork_id=artwork_id, artwork_comments=artwork_comments, artwork=artwork,
-                           average_grade=average_grade, favourited=favourited, rated=rated, rated_grade=rated_grade)
+            return render_template('artwork.html', artwork_id=artwork_id, artwork_comments=artwork_comments, artwork=artwork,
+                                   average_grade=average_grade, favourited=favourited, rated=rated, rated_grade=rated_grade)
+        if rated is None:
+            return render_template('artwork.html', artwork_id=artwork_id, artwork_comments=artwork_comments,
+                                   artwork=artwork,
+                                   average_grade=average_grade, favourited=favourited, rated=rated)
+    else:
+        return render_template('artwork.html', artwork_id=artwork_id, artwork_comments=artwork_comments, artwork=artwork,
+                           average_grade=average_grade)
 
 
 @app.route('/logowanie', methods=['POST', 'GET'])

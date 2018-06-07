@@ -74,14 +74,13 @@ class Artwork(db.Model):
     __tablename__='artwork'
     id = db.Column('id', db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
-    author_name = db.Column(db.String(155), nullable=False)
-    author_surname = db.Column(db.String(155), nullable=False)
-    year = db.Column(db.Integer, nullable=False)
+    author = db.Column(db.String(255), nullable=False)
+    year = db.Column(db.String(100), nullable=False)
     technique = db.Column(db.String(155))
     size = db.Column(db.String(45))
     description = db.Column(db.Text, nullable=False)
-    detail_1 = db.Column(db.Text, nullable=False)
-    detail_2 = db.Column(db.Text, nullable=False)
+    detail_1 = db.Column(db.Text)
+    detail_2 = db.Column(db.Text)
     exhibition_id = db.Column(db.Integer, db.ForeignKey('exhibition.id'), nullable=False)
     picture = db.relationship('Picture', backref=db.backref('artwork', lazy=True), cascade="all, delete-orphan",
                               single_parent=True)
@@ -106,7 +105,7 @@ class Artwork(db.Model):
         self.exhibition_id = exhibition_id
 
     def __repr__(self):
-        return str(self.id)
+        return str(self.title)
 
 
 class Exhibition(db.Model):
