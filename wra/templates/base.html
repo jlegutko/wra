@@ -58,10 +58,16 @@
           </li>
       {% else %}
           <li class="menu__item">
-              <a href="{{ url_for('register') }}" class="menu__link {% if 'rejestracja' in g.page %}menu__link--active{% endif %}" title="Profil">Rejestracja</a>
+              <a href="{{ url_for('register') }}" class="menu__link menu__link--icon {% if 'rejestracja' in g.page %}menu__link--active{% endif %}" title="Rejestracja">
+                  <span class="icon-user-plus menu__mobile" aria-hidden="true"></span>
+                  <span class="menu__desktop">Rejestracja</span>
+              </a>
           </li>
           <li class="menu__item">
-              <a href="{{ url_for('login') }}" class="menu__link {% if 'logowanie' in g.page %}menu__link--active{% endif %}" title="Profil">Logowanie</a>
+              <a href="{{ url_for('login') }}" class="menu__link menu__link--icon {% if 'logowanie' in g.page %}menu__link--active{% endif %}" title="Logowanie">
+                  <span class="icon-log-in menu__mobile" aria-hidden="true"></span>
+                  <span class="menu__desktop">Logowanie</span>
+              </a>
           </li>
       {% endif %}
       </ul>

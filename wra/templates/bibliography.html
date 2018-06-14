@@ -1,4 +1,37 @@
 {% extends "base.html" %}
 {% block title %} Bibliografia {% endblock %}
 {% block content %}
+    <section class="bibliography">
+        <h2 class="bibliography__title">Bibliografia</h2>
+        <h3 class="bibliography__entry">Pozycje drukowane</h3>
+        <ul class="bibliography__list">
+            {% for item in printed_source %}
+                <li class="bibliography__element">
+                    {{ item.author }}, {% if item.joint_publication %}praca zbior.,{% endif %} <p class="bibliography__italic">{{ item.title }}</p>,
+                    {% if item.translation %}{{ item.translation }}, {% endif %}{% if item.edit %}
+                    {{ item.edit }}, {% endif %} {{ item.publisher }}, {{ item.year }}.
+                </li>
+            {% endfor %}
+        </ul>
+        <h3 class="bibliography__entry">Netografia</h3>
+        <ul class="bibliography__list">
+            {% for item in online_source %}
+                <li class="bibliography__element">
+                    {% if item.author %}{{ item.author }}{% endif %} {{ item.title|md_footnotes }} {{ item.publisher }}
+                    {% if item.date %}{{ item.date|date_format }}{% if '[online]' not in item.publisher %} [online], {% endif %}{% endif %}
+                    {{ item.url|md_footnotes }} dostęp: {{ item.access|date_format }}.
+                </li>
+            {% endfor %}
+        </ul>
+        <h2 class="bibliography__title">Pliki multimedialne</h2>
+        <ul class="bibliography__list">
+            {% for item in image_source %}
+                <li class="bibliography__element">
+                    <h4>{{ item.title|md_footnotes }}:</h4>
+                    {{ item.description }}, {% if item.author %}{{ item.author }}, {% endif %}{{ item.url|md_footnotes}}, dostęp: {{ item.access|date_format }}.
+                </li>
+            {% endfor %}
+
+        </ul>
+    </section>
 {% endblock %}

@@ -28,16 +28,17 @@ class WraAdminIndexView(AdminIndexView):
     Custom Admin View
     """
     @expose('/')
-    @login_required
     def index(self):
         """
 
         :return:
         """
         g.page = '1'
-        if current_user.role.name != 'admin':
-            return redirect(url_for('index'))
-        return super(WraAdminIndexView, self).index()
+        if g.user.is_authenticated:
+            if current_user.role.name != 'admin':
+                return redirect(url_for('index'))
+            return super(WraAdminIndexView, self).index()
+        return redirect(url_for('index'))
 
 
 # Administrator panel
@@ -340,6 +341,9 @@ def bibliography():
     online_source = OnlineSource.query.all()
     image_source = ImageSource.query.all()
     return render_template('bibliography.html', printed_source=printed_source, online_source=online_source, image_source=image_source)
+
+
+
 
 
 

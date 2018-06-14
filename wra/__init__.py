@@ -2,13 +2,25 @@ from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from flaskext.markdown import Markdown
+import markdown
+from flask import Markup
 
 
 app = Flask(__name__)
 
+md = markdown.Markdown(
+    extensions=['footnotes']
+)
 
-Markdown(app, extensions=['footnotes'])
+
+@app.template_filter('md_footnotes')
+def md_foootnotes(text):
+    return Markup(md.reset().convert(text))
+
+
+@app.template_filter('date_format')
+def date_format(date):
+    return date.strftime("%d.%m.%Y")
 
 
 # BCrypt

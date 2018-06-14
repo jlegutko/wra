@@ -112,15 +112,15 @@ class Exhibition(db.Model):
     __tablename__='exhibition'
     id = db.Column('id', db.Integer, primary_key=True)
     year = db.Column(db.Integer, nullable=False)
-    date = db.Column(db.Date)
     title = db.Column(db.String(300), nullable=False)
+    short_description = db.Column(db.Text, nullable=False)
     description = db.Column(db.Text, nullable=False)
     artwork = db.relationship('Artwork', backref=db.backref('exhibition', lazy=True), cascade="all, delete-orphan", single_parent=True)
 
-    def __init__(self, year=None, title=None, description=None, date=None):
+    def __init__(self, year=None, title=None, short_description=None, description=None):
         self.year = year
-        self.date = date
         self.title = title
+        self.short_description = short_description
         self.description = description
 
     def __repr__(self):
@@ -229,6 +229,7 @@ class Inspiration(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     url = db.Column(db.String(300), nullable=False)
+    image = db.Column(db.String(300), nullable=True)
 
     def __init__(self, title=None, url=None):
         self.title = title

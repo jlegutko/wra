@@ -1,4 +1,21 @@
 {% extends "base.html" %}
 {% block title %} Inspiracje {% endblock %}
 {% block content %}
+   <article class="info info--inspirations">
+        <h2 class="info__title">Inspiracje</h2>
+        <ul class="gallery">
+            {% for item in inspirations %}
+                <li class="gallery__item gallery__item--inspiration">
+                    <a class="gallery__link gallery__link--inspiration" href="{{ item.url }}">
+                        <img class="gallery__img" src="{{ url_for('static', filename='assets/images/' + item.image) }}">
+                        <div class="gallery__inspiration">
+                            <h3 class="gallery__header">
+                                {{ item.title }}
+                            </h3>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </article>
 {% endblock %}

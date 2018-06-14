@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %} Strona główna {% endblock %}
 {% block content %}
+
     <section class="year">
         <nav class="years">
             <ul class="years__menu">
@@ -31,10 +32,15 @@
                     </ul>
                     <a href="{{url_for('exhibition', exhibition_id = exhibition.id)}}" class="description" title="Przejdź do sekcji">
                         <h2 class="description__title">{{ exhibition.title }}</h2>
-                        <p class="description__content">{% set list = exhibition.description %} {{ list[0:800] }}[...]</p>
+                        <div class="description__content">{% set list = exhibition.description %} {{ exhibition.short_description|md_footnotes }}</div>
                         <span class="description--icon icon-chevrons-right" aria-hidden="true"></span>
                         <span class="visuallyhidden">Przejdź do sekcji</span>
                     </a>
+                    {% if loop.index == 1 %}
+                        <section class="identification">
+                            <h1 class="identification__name">Sztuka biało-czerwona</h1>
+                        </section>
+                    {% endif %}
                 </div>
             </section>
         {% endfor %}

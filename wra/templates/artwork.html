@@ -16,7 +16,7 @@
             <dt class="informations__title">Technika</dt>
             <dd class="informations__definition">{{ artwork.technique }}</dd>
             <dt class="informations__title">Opis</dt>
-            <dd class="informations__definition">{{ artwork.description }}</dd>
+            <dd class="informations__definition">{{ artwork.description|md_footnotes  }}</dd>
             <dt class="informations__title">Rok powstania</dt>
             <dd class="informations__definition">{{ artwork.year }}</dd>
           </dl>
@@ -79,35 +79,31 @@
         {% endif %}
       </div>
     </section>
-
-    {% for artwork in artworks %}
-        {% if artwork.detail_1 and artwork.detail_2 %}
-            <section class="details">
-              <h2 class="details__header">Detale</h2>
-              <div class="detail">
-                <div class="detail__item">
-                  <a href="{{ url_for('static', filename='assets/images/' + artwork.picture[1].name) }}" data-rel="lightcase:details" class="detail__link">
-                    <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[1].name) }}" class="detail__image">
-                  </a>
-                </div>
-                <div class="detail__description">
-                  <p class="detail__text">{{ artwork.detail_1 }}</p>
-                </div>
-              </div>
-              <div class="detail">
-                <div class="detail__item">
-                  <a href="{{ url_for('static', filename='assets/images/' + artwork.picture[2].name) }}" data-rel="lightcase:details" class="detail__link">
-                    <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[2].name) }}" class="detail__image">
-                  </a>
-                </div>
-                <div class="detail__description">
-                  <p class="detail__text">{{ artwork.detail_2 }}</p>
-                </div>
-              </div>
-            </section>
-        {% endif %}
-    {% endfor %}
-
+    {% if artwork.detail_1 and artwork.detail_2 %}
+        <section class="details">
+          <h2 class="details__header">Detale</h2>
+          <div class="detail">
+            <div class="detail__item">
+              <a href="{{ url_for('static', filename='assets/images/' + artwork.picture[1].name) }}" data-rel="lightcase:details" class="detail__link">
+                <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[1].name) }}" class="detail__image">
+              </a>
+            </div>
+            <div class="detail__description">
+              {{ artwork.detail_1|md_footnotes }}
+            </div>
+          </div>
+          <div class="detail">
+            <div class="detail__item">
+              <a href="{{ url_for('static', filename='assets/images/' + artwork.picture[2].name) }}" data-rel="lightcase:details" class="detail__link">
+                <img src="{{ url_for('static', filename='assets/images/' + artwork.picture[2].name) }}" class="detail__image">
+              </a>
+            </div>
+            <div class="detail__description">
+              {{ artwork.detail_2|md_footnotes }}
+            </div>
+          </div>
+        </section>
+    {% endif %}
     <div class="return">
       <a href="{{url_for('exhibition', exhibition_id = artwork.exhibition.id)}}" class="return__link">
         <span class="icon-chevron-left return__icon" aria-hidden="true"></span>
@@ -120,7 +116,7 @@
       {% if g.user.is_authenticated %}
         <div class="comments__add">
           <form class="comments__form" method="post" action={{ url_for('comment', artwork_id=artwork_id) }}>
-            <textarea class="comments__content" id="content" name="content" placeholder="What are you doing right now?" ></textarea>
+            <textarea class="comments__content" id="content" name="content" placeholder="Podziel się z nami swoją opinią!" ></textarea>
               <button type="submit" class="comments__button">
                 <span class="comments__icon icon-plus"></span>
                   Dodaj komentarz

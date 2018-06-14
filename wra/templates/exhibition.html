@@ -4,8 +4,9 @@
     <section class="period">
       <div class="period__description">
         <h2 class="period__title">{{ exhibition.title }}</h2>
-        <p class="period__details">{{ exhibition.description|markdown }}</p>
+        <div class="period__details">{{ exhibition.description|md_footnotes }}</div>
       </div>
+      <h3 class="period__gallery">Wybrane prace</h3>
       <ul class="gallery">
       {% for artwork in artworks %}
           {% if artwork.exhibition == exhibition %}
