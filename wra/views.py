@@ -90,7 +90,7 @@ def artwork(artwork_id):
     if artwork is None:
         return render_template('404.html')
     artwork_comments = Comment.query.filter_by(artwork_id=artwork_id).order_by(Comment.date.desc()).all()
-    avg = db.session.query(func.avg(Grade.grade).label('average')).first()
+    avg = db.session.query(func.avg(Grade.grade).label('average')).filter_by(artwork_id=artwork_id).first()
     average = avg[0]
     if average is None:
         average_grade = 0.0
