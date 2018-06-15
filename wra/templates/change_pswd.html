@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} Rejestracja {% endblock %}
+{% block title %} Zmiana hasła {% endblock %}
 {% block content %}
       <section class="form">
         <div class="form__container">
@@ -10,13 +10,14 @@
             <div class="profile profile--form">
               <div class="profile__header">
                 <span class="profile__icon profile__icon--bg icon-user" aria-hidden="true"></span>
-                <p class="profile__username">{{ user.username }}</p>
+                <p class="profile__username">{{ g.user.username }}</p>
               </div>
             </div>
 
             <form method="post" class="profile" action="{{ url_for('change') }}">
               <div class="profile__informations profile__informations--input">
-                <label for="old_password" class="profile__item profile__item--label">Stare hasło</label>
+                <label for="old_password" class="profile__item profile__item--label">Stare hasło
+                {% if error and error['password-not-match'] %}<span class="error">{{ error['password-not-match'] }}</span>{% endif %}</label>
                 <div class="profile__area profile__area--form">
                   <span class="profile__icon profile__icon--sm icon-lock"></span>
                   <input class="profile__data profile__data--input" type="password" id="old_password" name="old_password">
@@ -28,7 +29,9 @@
                   <input class="profile__data profile__data--input" type="password" id="new_password_1" name="new_password_1">
                 </div>
 
-                <label for="new_password_2" class="profile__item profile__item--label">Powtórz hasło</label>
+                <label for="new_password_2" class="profile__item profile__item--label">Powtórz hasło
+                {% if error and error['password-different'] %}<span class="error">{{ error['password-different'] }}</span>{% endif %}
+                </label>
                 <div class="profile__area profile__area--form">
                   <span class="profile__icon profile__icon--sm icon-lock"></span>
                   <input class="profile__data profile__data--input" type="password" id="new_password_2" name="new_password_2">

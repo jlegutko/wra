@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash, g
+from flask import render_template, request, redirect, url_for, flash, g, abort
 from flask_login import login_user, logout_user, current_user, login_required
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql import func
@@ -71,11 +71,17 @@ def index():
     return render_template('index.html', exhibitions=exhibitions, artworks=artworks, body_class="page-home")
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
+
+
 @app.route('/wystawa/<int:exhibition_id>')
 def exhibition(exhibition_id):
 
-    if exhibition_id > 4:
-        return render_template('404.html')
+    if exhibition_id > 4 or exhibition_id == 0:
+        return abort(404)
     exhibition = Exhibition.query.filter_by(id=exhibition_id).first()
     prev_exhibition = Exhibition.query.filter_by(id=exhibition_id - 1).first()
     next_exhibition = Exhibition.query.filter_by(id=exhibition_id + 1).first()
@@ -88,7 +94,7 @@ def exhibition(exhibition_id):
 def artwork(artwork_id):
     artwork = Artwork.query.filter_by(id=artwork_id).first()
     if artwork is None:
-        return render_template('404.html')
+        return abort(404)
     artwork_comments = Comment.query.filter_by(artwork_id=artwork_id).order_by(Comment.date.desc()).all()
     avg = db.session.query(func.avg(Grade.grade).label('average')).filter_by(artwork_id=artwork_id).first()
     average = avg[0]
@@ -147,12 +153,16 @@ def register():
         if request.form['username'] and request.form['name'] and request.form['surname'] and request.form['email'] \
                 and request.form['phone'] and request.form['password'] and request.form['repeat-password']:
             if len(request.form['password']) < 6:
-                error['password-short'] = 'Password must be at least 6 characters long.'
+                error['password-short'] = 'Hasło musi mieć długość conajmniej 6 znaków.'
             if request.form['password'] != request.form['repeat-password']:
-                error['password-different'] = 'Passwords do not match.'
+                error['password-different'] = 'Wprowadzone hasła są różne.'
 
             password = bcrypt.generate_password_hash(request.form['password']).decode('utf-8')
             user = User(request.form['username'], password)
+
+            if User.query.filter_by(username=request.form['username']).first():
+                error['username-taken'] = 'Nazwa użytkownika jest zajęta.'
+                flash(error['username-taken'], 'error')
 
             try:
                 db.session.add(user)
@@ -164,8 +174,8 @@ def register():
                 return redirect(url_for('index'))
             except IntegrityError:
                 db.session.rollback()
-                error['username-taken'] = 'This username is already taken.'
-                flash(error['username-taken'], 'error')
+                error['integrity-error'] = 'Coś poszło nie tak. Spróbuj ponownie.'
+                flash(error['integrity-error'], 'error')
 
             return render_template('register.html', error=error)
         else:
@@ -188,7 +198,7 @@ def comment(artwork_id):
             except IntegrityError:
                 db.session.rollback()
 
-            return render_template('404.html', error=error)
+            return abort(404)
 
 
 @app.route('/dzielo/<artwork_id>/ocena', methods=['POST'])
@@ -212,8 +222,10 @@ def grade(artwork_id):
                     return redirect(url_for('artwork', artwork_id=artwork_id))
                 except IntegrityError:
                     db.session.rollback()
+                    error['integrity-error'] = 'Coś poszło nie tak. Spróbuj ponownie.'
+                    flash(error['integrity-error'], 'error')
 
-            return render_template('404.html', error=error)
+            return abort(404)
 
 
 @app.route('/dzielo/<artwork_id>/ulubione', methods=['POST'])
@@ -230,6 +242,8 @@ def favourite(artwork_id):
                     return redirect(url_for('artwork', artwork_id=artwork_id))
                 except IntegrityError:
                     db.session.rollback()
+                    error['integrity-error'] = 'Coś poszło nie tak. Spróbuj ponownie.'
+                    flash(error['integrity-error'], 'error')
             elif fav is not None:
                 try:
                     db.session.delete(fav)
@@ -237,8 +251,10 @@ def favourite(artwork_id):
                     return redirect(url_for('artwork', artwork_id=artwork_id))
                 except IntegrityError:
                     db.session.rollback()
+                    error['integrity-error'] = 'Coś poszło nie tak. Spróbuj ponownie.'
+                    flash(error['integrity-error'], 'error')
 
-            return render_template('404.html', error=error)
+            return abort(404)
 
 
 @app.route('/profil/<int:user_id>')
@@ -277,7 +293,7 @@ def edit():
         except IntegrityError:
             db.session.rollback()
 
-        return render_template('404.html')
+        return abort(404)
 
     return render_template('edit_profile.html', user=user, profile=profile)
 
@@ -285,25 +301,33 @@ def edit():
 @app.route('/profil/haslo', methods=['POST', 'GET'])
 @login_required
 def change():
+    error = dict()
     user = User.query.filter_by(id=g.user.id).first()
+
     if request.method == 'GET':
-        return render_template('change_pswd.html', user=user)
+        return render_template('change_pswd.html')
 
     old_password = request.form.get('old_password')
     new_password_1 = request.form.get('new_password_1')
     new_password_2 = request.form.get('new_password_2')
 
-    if not bcrypt.check_password_hash(user.password, old_password) or (new_password_1 != new_password_2):
-        return redirect(url_for('change_pswd'))
+    if not bcrypt.check_password_hash(user.password, old_password):
+        error['password-not-match'] = 'Wprowadzone hasło jest niepoprawne.'
+        flash(error['password-not-match'], 'error')
+    if new_password_1 != new_password_2:
+        error['password-different'] = 'Wprowadzone hasła są różne.'
+        flash(error['password-different'], 'error')
+
+    if error:
+        return render_template('change_pswd.html', error=error)
     else:
         user.password = bcrypt.generate_password_hash(new_password_1).decode('utf-8')
         try:
             db.session.commit()
+            flash('Sukces', 'success')
             return redirect(url_for('profile', user_id=g.user.id))
         except IntegrityError:
             db.session.rollback()
-
-        return render_template('404.html')
 
 
 @app.route('/profil/usuwanie', methods=['POST', 'GET'])
@@ -321,6 +345,7 @@ def delete_profile():
 
     elif request.method == "GET":
         return render_template('delete_profile.html', user=user)
+
 
 
 @app.route('/o-serwisie')
@@ -341,9 +366,6 @@ def bibliography():
     online_source = OnlineSource.query.all()
     image_source = ImageSource.query.all()
     return render_template('bibliography.html', printed_source=printed_source, online_source=online_source, image_source=image_source)
-
-
-
 
 
 

@@ -15,36 +15,36 @@
               </label>
               <div class="profile__area profile__area--form">
                 <span class="profile__icon profile__icon--sm icon-user"></span>
-                <input class="profile__data profile__data--input" type="text" id="username" name="username" placeholder="login" {% if username %}value="{{ username }}"
-                    {% endif %}required>
+                <input class="profile__data profile__data--input" type="text" id="username" name="username" placeholder="login"
+                       value="{{ request.form['username'] }}" required>
               </div>
 
               <label for="name" class="profile__item profile__item--label">Imię</label>
               <div class="profile__area profile__area--form">
                 <span class="profile__icon profile__icon--sm icon-user"></span>
                 <input class="profile__data profile__data--input" type="text" id="name" name="name" placeholder="imię"
-                       {% if name %}value="{{ name }}" {% endif %}required>
+                       value="{{ request.form['name'] }}" required>
               </div>
 
               <label for="surname" class="profile__item profile__item--label">Nazwisko</label>
               <div class="profile__area profile__area--form">
                 <span class="profile__icon profile__icon--sm icon-user"></span>
                 <input class="profile__data profile__data--input" type="text" id="surname" name="surname" placeholder="nazwisko"
-                       {% if surname %}value="{{ surname }}" {% endif %}required>
+                       value="{{ request.form['surname'] }}" required>
               </div>
 
               <label for="email" class="profile__item profile__item--label">E-mail</label>
               <div class="profile__area profile__area--form">
                 <span class="profile__icon profile__icon--sm icon-mail"></span>
                 <input class="profile__data profile__data--input" type="text" id="email" name="email" placeholder="e-mail"
-                       {% if email %}value="{{ email }}" {% endif %}required>
+                       value="{{ request.form['email'] }}" required>
               </div>
 
               <label for="phone" class="profile__item profile__item--label">Telefon</label>
               <div class="profile__area profile__area--form">
                 <span class="profile__icon profile__icon--sm icon-phone"></span>
-                <input class="profile__data profile__data--input" type="tel" id="phone" name="phone" placeholder="telefon" {% if phone %}
-                       value="{{ phone }}"{% endif %}required>
+                <input class="profile__data profile__data--input" type="tel" id="phone" name="phone" placeholder="telefon"
+                       value="{{ request.form['phone'] }}" required>
               </div>
 
               <label for="password" class="profile__item profile__item--label">
