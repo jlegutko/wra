@@ -19,7 +19,7 @@
                 <li class="bibliography__element">
                     {% if item.author %}{{ item.author }}{% endif %} {{ item.title|md_footnotes }} {{ item.publisher }}
                     {% if item.date %}{{ item.date|date_format }}{% if '[online]' not in item.publisher %} [online], {% endif %}{% endif %}
-                    {{ item.url|md_footnotes }} dostęp: {{ item.access|date_format }}.
+                    {{ item.url|md_footnotes }}, dostęp: {{ item.access|date_format }}.
                 </li>
             {% endfor %}
         </ul>

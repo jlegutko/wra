@@ -38,7 +38,7 @@
                 </div>
               </div>
               <div class="profile__buttons">
-                <a class="profile__button profile__button--return" href="index.html">
+                <a class="profile__button profile__button--return" href="{{ url_for('profile', user_id=g.user.id) }}">
                   <span class="icon-rotate-ccw profile__icon profile__icon--button"></span> Powrót</a>
                 <input class="profile__button profile__button--save" type="submit" value="Zapisz zmiany">
               </div>

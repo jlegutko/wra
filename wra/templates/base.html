@@ -38,7 +38,7 @@
       {% if g.user.is_authenticated %}
           {% if g.user.role.name == 'admin' %}
               <li class="menu__item">
-                  <a href="/admin" class="menu__link menu__link--icon" title="Administracja">
+                  <a href="{{ url_for('admin.index') }}" class="menu__link menu__link--icon" title="Administracja">
                       <span class="icon-edit" aria-hidden="true"></span>
                       <span class="visuallyhidden">Administracja</span>
                   </a>

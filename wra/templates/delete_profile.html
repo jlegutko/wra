@@ -10,13 +10,13 @@
           <div class="profile profile--form">
             <div class="profile__header">
               <span class="profile__icon profile__icon--bg icon-user" aria-hidden="true"></span>
-              <p class="profile__username">jlegutko</p>
+              <p class="profile__username">{{ user.username }}</p>
             </div>
           </div>
           <p class="profile__delete"> Czy na pewno chcesz usunąć swoje konto? </p>
           <form method="post" class="profile" action="{{ url_for('delete_profile') }}">
             <div class="profile__buttons">
-              <a class="profile__button profile__button--information" href="index.html">
+              <a class="profile__button profile__button--information" href="{{ url_for('profile', user_id=g.user.id) }}">
                 <span class="icon-rotate-ccw profile__icon profile__icon--button"></span> Powrót</a>
     			      <input class="profile__button" type="submit" value="Usuń">
             </div>
